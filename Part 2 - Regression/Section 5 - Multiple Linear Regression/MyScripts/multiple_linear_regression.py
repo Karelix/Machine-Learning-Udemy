@@ -1,4 +1,32 @@
 # Multiple Linear Regression
+import statsmodels.formula.api as sm
+def backwardElimination(x,y,sl):
+  numVars = len(x[0])
+  temp = np.zeros((50,6),dtype = int)
+  for i in range(0,numVars):
+    regressor = sm.OLS(y,x).fit()
+    pval = regressor.pvalues.astype(float).tolist()
+    maxVar = max(pval)
+    adjR_before = regressor.rsquared_adj.astype(float)
+    if maxVar > sl:
+      j = pval.index(maxVar)
+      temp[:,j] = x[:,j]
+      x = np.delete(x,j,1)
+      tmp_regressor = sm.OLS(y,x).fit()
+      adjR_after = tmp_regressor.rsquared_adj.astype(float)
+      if(adjR_before >= adjR_after):
+        x_rollback = np.hstack((x,temp[:,[0,j]]))
+        x_rollback = np.delete(x_rollback,j,1)
+        print(regressor.summary())
+        return x_rollback
+      else:
+        continue
+    else:
+      print(regressor.summary())
+      return x
+  regressor.summary()
+  return x
+  
 
 # Importing the libraries
 import numpy as np
@@ -42,32 +70,34 @@ regressor.fit(x_train, y_train)
 y_pred = regressor.predict(x_test)
 
 # Building the optimal model using Backward Elimination
-import statsmodels.formula.api as sm
+#import statsmodels.formula.api as sm
 # Appending column of ones for b0
 x = np.append(arr = np.ones((50,1)).astype(int), values = x, 
               axis = 1)
 
 # Initialise x_opt
 x_opt = x[:, [0,1,2,3,4,5]] # x_opt = x
-regressor_OLS = sm.OLS(endog = y, exog = x_opt).fit() #Part 2
-regressor_OLS.summary()
-x_opt = x[:, [0,1,3,4,5]] # x_opt = x
-regressor_OLS = sm.OLS(endog = y, exog = x_opt).fit() #Part 2
-regressor_OLS.summary()
-x_opt = x_opt[:, [0,2,3,4]] # x_opt = x
-regressor_OLS = sm.OLS(endog = y, exog = x_opt).fit() #Part 2
-regressor_OLS.summary()
-x_opt = x_opt[:, [0,1,3]] # x_opt = x
-regressor_OLS = sm.OLS(endog = y, exog = x_opt).fit() #Part 2
-regressor_OLS.summary()
-x_opt = x_opt[:, [0,1]] # x_opt = x
-regressor_OLS = sm.OLS(endog = y, exog = x_opt).fit() #Part 2
-regressor_OLS.summary()
+SL = 0.05
+X_Modeled = backwardElimination(x_opt,y,SL)
+#regressor_OLS = sm.OLS(endog = y, exog = x_opt).fit() #Part 2
+#regressor_OLS.summary()
+#x_opt = x[:, [0,1,3,4,5]] # x_opt = x
+#regressor_OLS = sm.OLS(endog = y, exog = x_opt).fit() #Part 2
+#regressor_OLS.summary()
+#x_opt = x_opt[:, [0,2,3,4]] # x_opt = x
+#regressor_OLS = sm.OLS(endog = y, exog = x_opt).fit() #Part 2
+#regressor_OLS.summary()
+#x_opt = x_opt[:, [0,1,3]] # x_opt = x
+#regressor_OLS = sm.OLS(endog = y, exog = x_opt).fit() #Part 2
+#regressor_OLS.summary()
+#x_opt = x_opt[:, [0,1]] # x_opt = x
+#regressor_OLS = sm.OLS(endog = y, exog = x_opt).fit() #Part 2
+#regressor_OLS.summary()
+#
+#x_opt_train, x_opt_test, y_opt_train, y_opt_test = train_test_split(x_opt,y,test_size = 0.2,random_state = 0)
+#regressor_be = LinearRegression()
 
-x_opt_train, x_opt_test, y_opt_train, y_opt_test = train_test_split(x_opt,y,test_size = 0.2,random_state = 0)
-regressor_be = LinearRegression()
-
-regressor.fit(x_opt_train, y_opt_train)
-
-# Predicting the Test set results
-y_opt_pred = regressor.predict(x_opt_test)
+#regressor.fit(x_opt_train, y_opt_train)
+#
+## Predicting the Test set results
+#y_opt_pred = regressor.predict(x_opt_test)

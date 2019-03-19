@@ -38,13 +38,22 @@ dt_regressor.fit(x,y)
 #level = 6.5
 y_pred = dt_regressor.predict([[6.5]])
 
-# Visualising the Regression results
-#x_grid = np.arange(min(x),max(x),0.1)
-#x_grid = x_grid.reshape((len(x_grid),1))
+# Visualising the Regression results NOT GOOD
 plt.figure()
 plt.scatter(x,y,color='red')
-plt.plot(x,regressor.predict(x),color='magenta')
+plt.plot(x,dt_regressor.predict(x),color='magenta')
 plt.title('Truth or Bluff (Regression Model)')
+plt.xlabel('Position Level')
+plt.ylabel('Salary')
+plt.show()
+
+# Visualising the Regression results (Smoother)
+x_grid = np.arange(min(x),max(x),0.0001)
+x_grid = x_grid.reshape((len(x_grid),1))
+plt.figure()
+plt.scatter(x,y,color='red')
+plt.plot(x_grid,dt_regressor.predict(x_grid),color='magenta')
+plt.title('Truth or Bluff (Decision Tree Regression)')
 plt.xlabel('Position Level')
 plt.ylabel('Salary')
 plt.show()

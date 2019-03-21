@@ -1,4 +1,4 @@
-# Support Vector Machine (SVM)
+# Naive Bayes
 
 # Importing the libraries
 import numpy as np
@@ -21,9 +21,9 @@ sc_x = StandardScaler()
 x_train = sc_x.fit_transform(x_train)
 x_test = sc_x.transform(x_test)
 
-# Fitting SVM to the Training set
-from sklearn.svm import SVC
-classifier = SVC(kernel = 'rbf', random_state = 0)
+# Fitting the Naive Bayes to the Training set
+from sklearn.naive_bayes import GaussianNB
+classifier = GaussianNB()
 classifier.fit(x_train,y_train)
 
 # Predicting the Test set Results
@@ -46,7 +46,7 @@ plt.ylim(x2.min(),x2.max())
 for i,j in enumerate(np.unique(y_set)):
   plt.scatter(x_set[y_set == j,0],x_set[y_set == j, 1],
               c = ListedColormap(('red','green'))(i), label = j)
-plt.title('SVM (Training set)')
+plt.title('Naive Bayes (Training set)')
 plt.xlabel('Age')
 plt.ylabel('Estimated Salary')
 plt.legend()
@@ -64,8 +64,9 @@ plt.ylim(x2.min(),x2.max())
 for i,j in enumerate(np.unique(y_set)):
   plt.scatter(x_set[y_set == j,0],x_set[y_set == j, 1],
               c = ListedColormap(('red','green'))(i), label = j)
-plt.title('SVM (Test set)')
+plt.title('Naive Bayes (Test set)')
 plt.xlabel('Age')
 plt.ylabel('Estimated Salary')
 plt.legend()
 plt.show()
+

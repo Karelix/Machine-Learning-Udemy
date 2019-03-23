@@ -21,7 +21,10 @@ sc_x = StandardScaler()
 x_train = sc_x.fit_transform(x_train)
 x_test = sc_x.transform(x_test)
 
-# Fitting the Classifier to the Training set
+# Fitting the Decision Forest Classifier to the Training set
+from sklearn.ensemble import RandomForestClassifier
+classifier = RandomForestClassifier(n_estimators=10,criterion='entropy',random_state=0)
+classifier.fit(x_train,y_train)
 
 # Predicting the Test set Results
 y_pred = classifier.predict(x_test)
@@ -43,7 +46,7 @@ plt.ylim(x2.min(),x2.max())
 for i,j in enumerate(np.unique(y_set)):
   plt.scatter(x_set[y_set == j,0],x_set[y_set == j, 1],
               c = ListedColormap(('red','green'))(i), label = j)
-plt.title('Logistic Regression (Training set)')
+plt.title('Random Forest Classification (Training set)')
 plt.xlabel('Age')
 plt.ylabel('Estimated Salary')
 plt.legend()
@@ -61,7 +64,7 @@ plt.ylim(x2.min(),x2.max())
 for i,j in enumerate(np.unique(y_set)):
   plt.scatter(x_set[y_set == j,0],x_set[y_set == j, 1],
               c = ListedColormap(('red','green'))(i), label = j)
-plt.title('Logistic Regression (Test set)')
+plt.title('Random Forest Classification (Test set)')
 plt.xlabel('Age')
 plt.ylabel('Estimated Salary')
 plt.legend()
